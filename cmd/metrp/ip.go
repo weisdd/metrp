@@ -51,7 +51,7 @@ func (app *application) getPreferredIP() (string, error) {
 			}
 		}
 
-		return "", fmt.Errorf("There are no IPv4 interfaces that belong to METRP_PREFERRED_IPV4_PREFIX (%s)", app.PreferredIPv4Prefix)
+		return "", fmt.Errorf("there are no IPv4 interfaces that belong to METRP_PREFERRED_IPV4_PREFIX (%s)", app.PreferredIPv4Prefix)
 	}
 
 	app.infoLog.Print("METRP_PREFERRED_IPV4_PREFIX is not set either, so the app will listen on all interfaces")
