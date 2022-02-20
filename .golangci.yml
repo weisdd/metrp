@@ -1,0 +1,18 @@
+linters:
+  enable:
+    - gocritic
+    - gosec
+    - gofmt
+    - goimports
+    - gocyclo
+    - goconst
+    - prealloc
+    - revive
+    - unconvert
+    - unparam
+
+linters-settings:
+  gosimple:
+    go: "1.17"
+  gocyclo:
+    min-complexity: 15

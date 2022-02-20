@@ -1,6 +1,6 @@
 module github.com/weisdd/metrp
 
-go 1.16
+go 1.17
 
 require (
 	github.com/caarlos0/env/v6 v6.5.0

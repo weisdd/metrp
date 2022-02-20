@@ -1,9 +1,9 @@
-ARG ALPINE_VERSION=3.13.5
-ARG GOLANG_VERSION=1.16.4-alpine3.13
+ARG ALPINE_VERSION=3.15.0
+ARG GOLANG_VERSION=1.17.7-alpine3.15
+ARG VERSION
+ARG GIT_COMMIT
 
 FROM golang:${GOLANG_VERSION} as builder
-
-ARG VERSION
 
 WORKDIR /go/src/metrp/
 COPY go.mod go.sum ./
@@ -14,12 +14,6 @@ ENV CGO_ENABLED=0
 
 RUN go install \
     -installsuffix "static" \
-    -ldflags "                                          \
-      -X main.Version=${VERSION}                        \
-      -X main.GoVersion=$(go version | cut -d " " -f 3) \
-      -X main.Compiler=$(go env CC)                     \
-      -X main.Platform=$(go env GOOS)/$(go env GOARCH) \
-    " \
     ./...
 
 FROM alpine:${ALPINE_VERSION} as runtime

@@ -1,41 +1,9 @@
 version: '3'
 
-env:
-  TARGET: ./...
-
 tasks:
   default:
-    - task: test
     - task: lint
 
-  test:
-    cmds:
-      - go test $TARGET
-
   lint:
-    deps:
-      - lint:go-vet
-      - lint:golint
-      - lint:golangci-lint
-      - lint:gosec
-      - lint:staticcheck
-
-  lint:go-vet:
     cmds:
-      - go vet $TARGET
-
-  lint:golint:
-    cmds:
-      - golint $TARGET
-
-  lint:golangci-lint:
-    cmds:
-      - golangci-lint run $TARGET
-
-  lint:gosec:
-    cmds:
-      - gosec -quiet $TARGET
-
-  lint:staticcheck:
-    cmds:
-      - staticcheck $TARGET
+      - golangci-lint run
