@@ -5,7 +5,8 @@
 - Simplify creation of insecure transport;
 - Migrate to go 1.17;
 - Bump alpine version;
-- Add GitHub workflow to automatically publish images.
+- Add GitHub workflow to automatically publish images;
+- Add dependabot alerts.
 
 ## 0.5.0
 
