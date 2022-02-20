@@ -4,7 +4,8 @@
 
 - Simplify creation of insecure transport;
 - Migrate to go 1.17;
-- Bump alpine version.
+- Bump alpine version;
+- Add GitHub workflow to automatically publish images.
 
 ## 0.5.0
 

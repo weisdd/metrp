@@ -1,9 +1,4 @@
-ARG ALPINE_VERSION=3.15.0
-ARG GOLANG_VERSION=1.17.7-alpine3.15
-ARG VERSION
-ARG GIT_COMMIT
-
-FROM golang:${GOLANG_VERSION} as builder
+FROM golang:1.17.7-alpine3.15 as builder
 
 WORKDIR /go/src/metrp/
 COPY go.mod go.sum ./
@@ -16,7 +11,7 @@ RUN go install \
     -installsuffix "static" \
     ./...
 
-FROM alpine:${ALPINE_VERSION} as runtime
+FROM alpine:3.15.0 as runtime
 
 RUN set -x \
   && apk add --update --no-cache ca-certificates tzdata \

@@ -33,6 +33,10 @@ Minuses:
 
 The same thing could be done using a reverse-proxy such as `caddy`, `nginx`, or others, though they seem to be a bit heavy for the task and more difficult to configure.
 
+## Installation
+
+Docker images are published on [quay.io/weisdd/metrp](https://quay.io/repository/weisdd/metrp?tab=tags).
+
 ## Configuration
 
 ### Environment variables
