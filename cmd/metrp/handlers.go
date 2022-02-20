@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/tls"
-	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -43,21 +42,9 @@ func (app *application) NewUpstream(name string, rawurl string) *upstream {
 		}
 	}
 
-	// The values below are equal to http.DefaultTransport except for TLSClientConfig
+	var transport http.RoundTripper = http.DefaultTransport.(*http.Transport).Clone()
 	/* #nosec G402 */
-	var transport http.RoundTripper = &http.Transport{
-		Proxy: http.ProxyFromEnvironment,
-		DialContext: (&net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
-		}).DialContext,
-		ForceAttemptHTTP2:     true,
-		MaxIdleConns:          100,
-		IdleConnTimeout:       90 * time.Second,
-		TLSHandshakeTimeout:   10 * time.Second,
-		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
-		ExpectContinueTimeout: 1 * time.Second,
-	}
+	transport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	proxy := &httputil.ReverseProxy{Director: director, Transport: transport}
 	proxy.ErrorLog = app.errorLog
