@@ -35,7 +35,7 @@ The same thing could be done using a reverse-proxy such as `caddy`, `nginx`, or 
 
 ## Installation
 
-Docker images are published on [quay.io/weisdd/metrp](https://quay.io/repository/weisdd/metrp?tab=tags).
+Docker images are published on [ghcr.io/weisdd/metrp](https://github.com/weisdd/metrp/pkgs/container/metrp).
 
 ## Configuration
 
