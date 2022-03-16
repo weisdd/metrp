@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
@@ -13,22 +11,23 @@ import (
 )
 
 type application struct {
-	errorLog            *log.Logger
-	infoLog             *log.Logger
-	debugLog            *log.Logger
-	upstreams           []*upstream
-	IP                  string
-	Port                int           `env:"METRP_PORT" envDefault:"8080"`
-	PreferredIPv4       string        `env:"METRP_PREFERRED_IPV4"`
-	PreferredIPv4Prefix string        `env:"METRP_PREFERRED_IPV4_PREFIX"`
-	ConfigPath          string        `env:"METRP_CONFIG_PATH" envDefault:"metrp.yaml"`
-	ReadTimeout         time.Duration `env:"METRP_READ_TIMEOUT" envDefault:"10s"`
-	WriteTimeout        time.Duration `env:"METRP_WRITE_TIMEOUT" envDefault:"10s"`
-	BasicAuth           bool          `env:"METRP_BASIC_AUTH"`
-	Username            string        `env:"METRP_USERNAME"`
-	Password            string        `env:"METRP_PASSWORD"`
-	UseToken            bool          `env:"METRP_USE_TOKEN" envDefault:"true"`
-	Token               string
+	errorLog                *log.Logger
+	infoLog                 *log.Logger
+	debugLog                *log.Logger
+	upstreams               []*upstream
+	IP                      string
+	Port                    int           `env:"METRP_PORT" envDefault:"8080"`
+	PreferredIPv4           string        `env:"METRP_PREFERRED_IPV4"`
+	PreferredIPv4Prefix     string        `env:"METRP_PREFERRED_IPV4_PREFIX"`
+	ConfigPath              string        `env:"METRP_CONFIG_PATH" envDefault:"metrp.yaml"`
+	ReadTimeout             time.Duration `env:"METRP_READ_TIMEOUT" envDefault:"10s"`
+	WriteTimeout            time.Duration `env:"METRP_WRITE_TIMEOUT" envDefault:"10s"`
+	GracefulShutdownTimeout time.Duration `env:"METRP_SHUTDOWN_TIMEOUT" envDefault:"20s"`
+	BasicAuth               bool          `env:"METRP_BASIC_AUTH"`
+	Username                string        `env:"METRP_USERNAME"`
+	Password                string        `env:"METRP_PASSWORD"`
+	UseToken                bool          `env:"METRP_USE_TOKEN" envDefault:"true"`
+	Token                   string
 }
 
 type upstream struct {
@@ -38,7 +37,7 @@ type upstream struct {
 }
 
 func main() {
-	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime|log.Lshortfile)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	debugLog := log.New(os.Stdout, "DEBUG\t", log.Ldate|log.Ltime|log.Lshortfile)
 
@@ -79,15 +78,8 @@ func main() {
 		}
 	}
 
-	srv := &http.Server{
-		Addr:         fmt.Sprintf("%s:%d", app.IP, app.Port),
-		ErrorLog:     app.errorLog,
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  app.ReadTimeout,
-		WriteTimeout: app.WriteTimeout,
+	err = app.serve()
+	if err != nil {
+		app.errorLog.Fatal(err)
 	}
-	app.infoLog.Printf("starting server on %s:%d", app.IP, app.Port)
-	err = srv.ListenAndServe()
-	app.errorLog.Fatal(err)
 }

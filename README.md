@@ -52,6 +52,7 @@ Docker images are published on [ghcr.io/weisdd/metrp](https://github.com/weisdd/
 | `METRP_PASSWORD`            |               | Password to require if basic authentication is enabled.      |
 | `METRP_USE_TOKEN` | `true` | Whether to forward k8s token to upstream (useful for `kube-apiserver` and other upstreams that require authorization). Be careful though with untrusted upstreams! |
 | `METRP_READ_TIMEOUT`        | `10s`         | `ReadTimeout` covers the time from when the connection is accepted to when the request body is fully read (if you do read the body, otherwise to the end of the headers). [More details](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/) |
+| `METRP_SHUTDOWN_TIMEOUT` | `20s` | Maximum amount of time to wait for all connections to be closed. [More details](https://pkg.go.dev/net/http#Server.Shutdown) |
 | `METRP_WRITE_TIMEOUT`       | `10s`           | `WriteTimeout` normally covers the time from the end of the request header read to the end of the response write (a.k.a. the lifetime of the ServeHTTP). [More details](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/) |
 
 ### metrp.yaml syntax
