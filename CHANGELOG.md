@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.5.2
+
+- Add graceful shutdown;
+- Bump alpine to 3.15.1;
+- Migrate to go 1.18 (including `net/netip`).
+
 ## 0.5.1
 
 - Simplify creation of insecure transport;

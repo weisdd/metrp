@@ -3,31 +3,32 @@ package main
 import (
 	"fmt"
 	"net"
-	"strings"
+	"net/netip"
 )
 
 // getPreferredIP returns a system IPv4 address that matches PreferredIPv4 or belongs to PreferredIPv4Prefix
 func (app *application) getPreferredIP() (string, error) {
 	if app.PreferredIPv4 != "" {
-		ipv4Addr := net.ParseIP(app.PreferredIPv4)
-		if ipv4Addr == nil {
+		ip, err := netip.ParseAddr(app.PreferredIPv4)
+		if err != nil {
 			return "", fmt.Errorf("%q should be a valid IPv4 address", app.PreferredIPv4)
 		}
 
-		if strings.Contains(ipv4Addr.String(), ":") {
+		if !ip.Is4() {
 			return "", fmt.Errorf("%q should be an IPv4 address", app.PreferredIPv4)
 		}
 
-		return ipv4Addr.String(), nil
+		return ip.String(), nil
 	}
 	app.infoLog.Print("METRP_PREFERRED_IPV4 is not set, checking for METRP_PREFERRED_IPV4_PREFIX")
 
 	if app.PreferredIPv4Prefix != "" {
-		_, preferredPrefix, err := net.ParseCIDR(app.PreferredIPv4Prefix)
+		preferredPrefix, err := netip.ParsePrefix(app.PreferredIPv4Prefix)
 		if err != nil {
 			return "", err
 		}
-		if strings.Contains(preferredPrefix.String(), ":") {
+
+		if !preferredPrefix.Addr().Is4() {
 			return "", fmt.Errorf("%q should be an IPv4 prefix", app.PreferredIPv4Prefix)
 		}
 
@@ -39,15 +40,15 @@ func (app *application) getPreferredIP() (string, error) {
 
 		// Go over IPv4 addresses and find one that belongs to the preferred network
 		for _, addr := range addrs {
-			if !strings.Contains(addr.String(), ":") {
-				ipv4Addr, _, err := net.ParseCIDR(addr.String())
-				if err != nil {
-					return "", err
-				}
+			prefix, err := netip.ParsePrefix(addr.String())
+			// Should never happen
+			if err != nil {
+				app.errorLog.Print(err)
+				continue
+			}
 
-				if preferredPrefix.Contains(ipv4Addr) {
-					return ipv4Addr.String(), nil
-				}
+			if preferredPrefix.Contains(prefix.Addr()) {
+				return prefix.Addr().String(), nil
 			}
 		}
 

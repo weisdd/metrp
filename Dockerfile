@@ -1,4 +1,4 @@
-FROM golang:1.17.7-alpine3.15 as builder
+FROM golang:1.18.0-alpine3.15 as builder
 
 WORKDIR /go/src/metrp/
 COPY go.mod go.sum ./
@@ -11,7 +11,7 @@ RUN go install \
     -installsuffix "static" \
     ./...
 
-FROM alpine:3.15.0 as runtime
+FROM alpine:3.15.1 as runtime
 
 RUN set -x \
   && apk add --update --no-cache ca-certificates tzdata \
