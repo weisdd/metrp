@@ -20,6 +20,9 @@ jobs:
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
+        # TODO: remove once the action starts downloading v1.45.0+
+        with:
+          version: v1.45.0
 
   docker:
     runs-on: ubuntu-latest
