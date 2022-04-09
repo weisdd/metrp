@@ -5,9 +5,11 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/caarlos0/env/v6"
+	"go.uber.org/automaxprocs/maxprocs"
 )
 
 type application struct {
@@ -16,6 +18,7 @@ type application struct {
 	debugLog                *log.Logger
 	upstreams               []*upstream
 	IP                      string
+	SetGomaxProcs           bool          `env:"METRP_SET_GOMAXPROCS" envDefault:"true"`
 	Port                    int           `env:"METRP_PORT" envDefault:"8080"`
 	PreferredIPv4           string        `env:"METRP_PREFERRED_IPV4"`
 	PreferredIPv4Prefix     string        `env:"METRP_PREFERRED_IPV4_PREFIX"`
@@ -51,6 +54,15 @@ func main() {
 	if err != nil {
 		app.errorLog.Fatalf("%+v\n", err)
 	}
+
+	if app.SetGomaxProcs {
+		undo, err := maxprocs.Set()
+		defer undo()
+		if err != nil {
+			app.errorLog.Printf("failed to set GOMAXPROCS: %v", err)
+		}
+	}
+	app.infoLog.Printf("Runtime settings: GOMAXPROCS = %d", runtime.GOMAXPROCS(0))
 
 	err = app.checkBasicAuthConfig()
 	if err != nil {

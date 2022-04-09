@@ -45,6 +45,7 @@ Docker images are published on [ghcr.io/weisdd/metrp](https://github.com/weisdd/
 | --------------------------- | ------------- | ------------------------------------------------------------ |
 | `METRP_PREFERRED_IPV4`      |               | Allows to bind web-server only to a specific IP, e.g. `192.168.0.1`. |
 | `METRP_PREFERRED_IPV4_PREFIX` |               | Allows to bind web-server only to an interface that belongs to a specific prefix, e.g. `192.168.0.0/24`. |
+| `METRP_SET_GOMAXPROCS` | `true` | Automatically set `GOMAXPROCS` to match Linux container CPU quota via [uber-go/automaxprocs](https://github.com/uber-go/automaxprocs). |
 | `METRP_PORT`                | `8080`        | Port the web server will listen on.                          |
 | `METRP_CONFIG_PATH`         | `metrp.yaml`  | Path to a file with a list of endpoints                      |
 | `METRP_BASIC_AUTH`          | `false`       | Whether to enable basic authentication.                      |
