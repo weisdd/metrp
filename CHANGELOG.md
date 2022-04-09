@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.5.3
+
+- Automatically set `GOMAXPROCS` to match Linux container CPU quota via [uber-go/automaxprocs](https://github.com/uber-go/automaxprocs). Enabled by default, can be turned off via `METRP_SET_GOMAXPROCS: false`.
+
 ## 0.5.2
 
 - Add graceful shutdown;

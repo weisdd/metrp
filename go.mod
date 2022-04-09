@@ -7,3 +7,8 @@ require (
 	github.com/gorilla/mux v1.8.0
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+require (
+	github.com/kr/text v0.2.0 // indirect
+	go.uber.org/automaxprocs v1.5.1
+)
