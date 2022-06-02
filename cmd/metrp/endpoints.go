@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // isURL checks whether a string contains a valid URL
