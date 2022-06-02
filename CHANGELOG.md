@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.5.4
+
+- Bump deps:
+  - Alpine to `3.16.0`;
+  - `caarlos0/env/v6` to `6.9.3`;
+  - `go-yaml/yaml` to `3.0.1`;
+- Bump go to `1.18.3`.
+
 ## 0.5.3
 
 - Automatically set `GOMAXPROCS` to match Linux container CPU quota via [uber-go/automaxprocs](https://github.com/uber-go/automaxprocs). Enabled by default, can be turned off via `METRP_SET_GOMAXPROCS: false`.
